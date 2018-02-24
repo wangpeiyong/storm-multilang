@@ -1,0 +1,31 @@
+{
+  "name":"word-count-multilang",
+  "configuration":{
+    "topology.debug":true,
+    "topology.workers":3
+  },
+  "components":{
+    "spouts":{
+      "spout":{
+        "command":"node",
+        "path":"randomsentence.js",
+        "fields":["word"],
+        "parallelism_hint":5
+      }
+    },
+    "bolts":{
+      "split":{
+        "command":"python",
+        "path":"splitsentence.py",
+        "fields":["word"],
+        "grouping":[
+          {
+            "type":"shuffle",
+            "component_id":"spout"
+          }
+        ],
+        "parallelism_hint":8
+      }
+    }
+  }
+}
